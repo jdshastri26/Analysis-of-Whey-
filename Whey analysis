@@ -1,0 +1,68 @@
+def get_nutrient_data():
+    # Function to get and validate user input for nutrient data
+    def input_positive_float(prompt):
+        while True:
+            try:
+                value = float(input(prompt))
+                if value < 0:
+                    raise ValueError
+                return value
+            except ValueError:
+                print("Please enter a valid positive number.")
+
+    protein = input_positive_float("Enter the amount of Protein (grams per serving): ")
+    carbohydrates = input_positive_float("Enter the amount of Carbohydrates (grams per serving): ")
+    fats = input_positive_float("Enter the amount of Fats (grams per serving): ")
+    serving_size = input_positive_float("Enter the Serving Size (grams): ")
+
+    return {
+        'Protein': protein,
+        'Carbohydrates': carbohydrates,
+        'Fats': fats,
+        'Serving Size': serving_size
+    }
+
+def analyze_whey(whey_data):
+    # Calculate total nutrients per serving
+    total_nutrients = whey_data['Protein'] + whey_data['Carbohydrates'] + whey_data['Fats']
+
+    if total_nutrients == 0:
+        raise ValueError("Total nutrients cannot be zero. Please check the input values.")
+
+    # Calculate percentage of each nutrient per serving
+    percentage_protein = (whey_data['Protein'] / total_nutrients) * 100
+    percentage_carbohydrates = (whey_data['Carbohydrates'] / total_nutrients) * 100
+    percentage_fats = (whey_data['Fats'] / total_nutrients) * 100
+
+    # Calculate caloric content
+    # 1 gram of protein = 4 calories
+    # 1 gram of carbohydrates = 4 calories
+    # 1 gram of fat = 9 calories
+    calories_protein = whey_data['Protein'] * 4
+    calories_carbohydrates = whey_data['Carbohydrates'] * 4
+    calories_fats = whey_data['Fats'] * 9
+    total_calories = calories_protein + calories_carbohydrates + calories_fats
+
+    # Display the analysis
+    print("\nWhey Composition Analysis:")
+    print(f"Serving Size: {whey_data['Serving Size']} grams")
+    print(f"Protein: {whey_data['Protein']} grams ({percentage_protein:.2f}%)")
+    print(f"Carbohydrates: {whey_data['Carbohydrates']} grams ({percentage_carbohydrates:.2f}%)")
+    print(f"Fats: {whey_data['Fats']} grams ({percentage_fats:.2f}%)")
+    print(f"Total Calories: {total_calories} kcal")
+
+    print("\nCaloric Content Breakdown:")
+    print(f"Calories from Protein: {calories_protein} kcal")
+    print(f"Calories from Carbohydrates: {calories_carbohydrates} kcal")
+    print(f"Calories from Fats: {calories_fats} kcal")
+
+def main():
+    print("Welcome to the Whey Composition Analyzer!")
+    whey_data = get_nutrient_data()
+    try:
+        analyze_whey(whey_data)
+    except ValueError as e:
+        print(f"Error: {e}")
+
+if __name__ == "__main__":
+    main()
